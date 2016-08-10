@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template-definition version="1.0" xmlns="http://www.polopoly.com/polopoly/cm/app/xml">
+  <input-template name="com.atex.plugins.podcast.Podcast" label="com.atex.plugins.podcast.podcast">
+
+    <policy>com.atex.plugins.podcast.PodcastPolicy</policy>
+
+    <editor>com.polopoly.cm.app.widget.OTopPolicyWidget</editor>
+    <viewer>com.polopoly.cm.app.widget.OTopPolicyWidget</viewer>
+    <editor contextName="orchid_TOCENTRY">com.polopoly.siteengine.standard.contentlist.OContentListEntryBasePolicyWidget</editor>
+    <viewer contextName="orchid_TOCENTRY">com.polopoly.siteengine.standard.contentlist.OContentListEntryBasePolicyWidget</viewer>
+
+    <param name="ViewState_insert">false</param>
+    <param name="ViewState_refresh">refresh</param>
+
+    <param name="EditState_saveAndClose">false</param>
+    <param name="EditState_saveAndInsert">false</param>
+    <param name="EditState_saveAndFastInsert">false</param>
+    <param name="EditState_saveAndView">true</param>
+
+    <param name="EditNewState_saveAndClose">false</param>
+    <param name="EditNewState_saveAndInsert">false</param>
+    <param name="EditNewState_saveAndFastInsert">true</param>
+    <param name="EditNewState_saveAndView">false</param>
+
+    <param name="renderTemplateIconInSelect">true</param>
+
+    <param name="metadataPath">categorization</param>
+
+    <type>Article</type>
+
+    <content-list name="images" input-template="com.atex.plugins.podcast.ImageContentListWrapper" />
+    <content-list name="publishingQueue" input-template="com.atex.plugins.podcast.PublishingQueueContentListWrapper" />
+
+    <layout name="pages" input-template="p.AjaxPageMenu">
+      <layout name="content" input-template="p.Page" label="com.atex.plugins.podcast.Content">
+        <param name="lazyInit">true</param>
+        <layout name="textMetadataColumns" input-template="p.ColumnHolder">
+          <layout name="textColumn" input-template="p.Column">
+            <param name="width">70</param>
+            <param name="widthRelative">true</param>
+            <layout name="text" input-template="p.Group">
+
+              <field name="name" input-template="p.ContentName" label="com.atex.plugins.podcast.name">
+              </field>
+              <field name="text" input-template="p.TextArea" label="com.atex.plugins.podcast.text">
+              </field>
+              <field name="imageCreator" input-template="p.ContentCreator" label="com.atex.plugins.podcast.imageCreator">
+                <param name="createWithSecurityParent">true</param>
+                <param name="securityParentAlias">content-securityparent</param>
+                <param name="insertTargetAlias">content</param>
+                <param name="askInsertTarget">false</param>
+                <param name="insertionContentListName">images</param>
+                <param name="askInsertionContentListName">false</param>
+                <param name="askContentListPosition">false</param>
+                <param name="showCategorySelectWithOneCategory">false</param>
+                <param name="insertPosition">top</param>
+                <param name="concatenateCategories">true</param>
+                <param name="populateFromVariant">com.atex.plugins.podcast.image</param>
+              </field>
+              <field name="images" input-template="p.ContentListEntryContainer" label="com.atex.plugins.podcast.image">
+                <param name="contentListName">images</param>
+              </field>
+            </layout>
+            <layout name="pq" input-template="p.Group">
+              <field name="numberOfItems" input-template="p.TextInput" label="com.atex.plugins.podcast.numberOfItems" required="true">
+                <help>com.atex.plugins.podcast.numberOfItems.help</help>
+                <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
+                <param name="type">int</param>
+                <param name="size">5</param>
+                <param name="maxlength">5</param>
+                <param name="default">10</param>
+              </field>
+              <field name="publishingQueueCreator" input-template="p.ContentCreator" label="com.atex.plugins.podcast.newPublishingQueue">
+                <param name="createWithSecurityParent">true</param>
+                <param name="securityParentAlias">content</param>
+                <param name="insertTargetAlias">content</param>
+                <param name="askInsertTarget">false</param>
+                <param name="insertionContentListName">publishingQueue</param>
+                <param name="askInsertionContentListName">false</param>
+                <param name="showCategorySelectWithOneCategory">false</param>
+                <param name="askContentListPosition">false</param>
+                <param name="insertPosition">top</param>
+                <idparam name="templateRoot">
+                  <externalid>p.siteengine.SourcesRepositoryTemplates</externalid>
+                </idparam>
+              </field>
+              <field name="publishingQueue" input-template="p.ContentListEntryContainer" label="com.atex.plugins.podcast.publishingQueue">
+                <param name="contentListName">publishingQueue</param>
+                <param name="showActionButtonsInViewMode">false</param>
+              </field>
+            </layout>
+          </layout>
+          <layout name="metadataColumn" input-template="p.Column">
+            <param name="width">30</param>
+            <param name="widthRelative">true</param>
+
+            <field name="publishedDate" input-template="p.OptionalDateTime" label="com.atex.plugins.podcast.PublishedDate">
+              <help>com.atex.plugins.podcast.PublishedDate.Help</help>
+              <param name="inlineHelp">true</param>
+              <param name="showSeconds">false</param>
+            </field>
+            <field name="editedDate" input-template="p.OptionalDateTime" label="com.atex.plugins.podcast.EditedDate">
+              <help>com.atex.plugins.podcast.EditedDate.Help</help>
+              <param name="inlineHelp">true</param>
+              <param name="saveDefaultValue">commitTime</param>
+              <param name="showSeconds">false</param>
+            </field>
+            <layout name="metadataSection" input-template="p.LabeledSection" label="com.atex.plugins.podcast.Categorization">
+              <param name="cssClass">p_section</param>
+              <layout name="categorizationPadding" input-template="p.Group">
+                <param name="showLabel">false</param>
+                <param name="showFieldset">false</param>
+                <param name="cssClass">p_padding</param>
+                <field name="categorization" input-template="p.Metadata" label=""></field>
+                <field name="categorizationSuggestion" input-template="p.ArticleCategorizationSuggestion">
+                  <param name="metadataPath">categorization</param>
+                </field>
+                <field name="relatedArticleSearch" input-template="p.SearchForRelated" label="">
+                  <param name="metadataPath">categorization</param>
+                </field>
+              </layout>
+            </layout>
+
+          </layout>
+        </layout>
+      </layout>
+
+      <layout name="settings" input-template="p.Page" label="com.atex.plugins.podcast.Settings">
+        <param name="lazyInit">true</param>
+        <layout name="structure" input-template="p.Group">
+          <field name="securityParent" input-template="p.SecurityParentSelect" label="com.atex.plugins.podcast.ParentPage">
+            <help>com.atex.plugins.podcast.ParentPage.Help</help>
+            <param name="inlineHelp">true</param>
+            <param name="width">320</param>
+            <param name="height">100</param>
+            <idparam name="rootContent">
+              <externalid>p.siteengine.Sites.d</externalid>
+            </idparam>
+          </field>
+          <field name="associatedSites" input-template="p.siteengine.SiteSelector" label="com.atex.plugins.podcast.AssociatedSites">
+            <help>com.atex.plugins.podcast.AssociatedSites.Help</help>
+            <param name="inlineHelp">true</param>
+            <param name="multipleSelect">true</param>
+            <param name="allowDepartments">true</param>
+            <param name="allowArticles">false</param>
+            <param name="width">320</param>
+            <param name="height">100</param>
+            <idparam name="rootContent">
+              <externalid>p.siteengine.Sites.d</externalid>
+            </idparam>
+          </field>
+        </layout>
+      </layout>
+    </layout>
+
+    <field name="associatedUsers" input-template="p.AssociatedUsers" />
+
+    <output-templates mode="www">
+      <id>com.atex.plugins.podcast.Podcast.ot</id>
+    </output-templates>
+    <output-templates mode="link">
+      <id>com.atex.plugins.podcast.Podcast.FeedLink.ot</id>
+    </output-templates>
+  </input-template>
+</template-definition>
