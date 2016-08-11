@@ -24,6 +24,10 @@ public class PodcastController extends BasePodcastController {
 
         super.populateModelAfterCacheKey(request, m, cacheInfo, context);
 
+        if (isRssFeed(request)) {
+            ModelPathUtil.set(m.getLocal(), "rssFeed", true);
+        }
+        
         final PodcastPolicy podcastPolicy = (PodcastPolicy) ModelPathUtil.getBean(context.getContentModel());
 
         // Add the image of the feed

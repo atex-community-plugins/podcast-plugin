@@ -1,3 +1,96 @@
+#if ($rssFeed)<?xml version="1.0"?> ## this must be the first thing otherwise we will get validation errors
+#macro(drawDimension $dimensions $id $sep)
+  #set($result='')
+  #foreach($dimension in $dimensions)
+    #if ($dimension.id == $id)
+      #set($entitiesCount = $dimension.entities.size())
+      #if($entitiesCount > 0)
+        #foreach($entity in $dimension.entities)
+          #if ($foreach.count > 1)
+            #set($result="${result}${sep}")
+          #end
+          #set($result="${result}${entity.name}")
+        #end
+      #end
+      #break
+    #end
+  #end
+  $result.trim()
+#end
+#macro(cdata $value)<![CDATA[$!value]]>#end
+## Will need site alias set to get absolute URLs
+#set($feedLink = "#link({'contentId': $content.contentId, 'htmlEncodeLink': 'true', 'requestAttribs': {'localLinksEnabled': 'false'}, 'params': {'rss': 'true'}})")
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>#cdata($content.name)</title>
+    <link>$!feedLink</link>
+    <description>#cdata($content.text.value)</description>
+    <lastBuildDate>$date.format("E, dd MMM yyyy HH:mm:ss Z", $date.date)</lastBuildDate>
+    ## Add channel image
+    #if($content.imageId)
+        ## Will need an image service configuration for image service location to get absolute URL
+        #set($imageUrl = $esc.xml("$!domain${tool_img.getUrlBuilder($content.imageId.contentIdString).width(200).buildUrl()}"))
+        <image>
+            <title>#cdata($content.name)</title>
+            <link>$!feedLink</link>
+            <url>$!imageUrl</url>
+        </image>
+    #end
+    ##set($language = $content.language.value)
+    ##if("$!language" != "")
+    ##    <language>$!language</language>
+    ##end
+    #set($dimensions = $content.metadata.dimensions)
+    #set($category="#drawDimension($dimensions, 'dimension.IPTC', ',')")
+    #if ($category)
+      <category>#cdata($category.trim())</category>
+    #end
+
+    #foreach ($item in $content.feeds.elements)
+      #set($feedContent = $item.feed.content)
+      #set($title = $item.title.value)
+      #set($max = $item.numberOfItems.value)
+      #set($from = $item.startFrom.value)
+
+      #if ($from)
+        ## $from is 1 based, make it 0 based.
+        #set($from = $math.sub($math.toInteger($from), 1))
+      #else
+        #set($from = 0)
+      #end
+
+      #set($origListSize = $feedContent.defaultList.size())
+      #if ($max)
+        #set($numberOfItems = $math.min($math.toInteger($max), $origListSize))
+      #else
+        #set($numberOfItems = $feedContent.numberOfItems)
+      #end
+      #if ($numberOfItems <= 0)
+        #set($numberOfItems = $origListSize)
+      #end
+
+      #if ($from > 0)
+        ## make sure $numberOfItems still fall in the current list size
+        #set($numberOfItems = $math.min($math.add($numberOfItems, $from), $origListSize))
+      #elseif ($from < 0)
+        #set($from = 0)
+      #end
+
+      #set($list = $feedContent.defaultList.subList($from, $numberOfItems))
+      #if ($list.size() > 0)
+        #foreach($entry in $list)
+            #set($linkContent = $entry.content)
+            #renderwithfallback({"content": $linkContent.contentId, "params": {"mode": "podcastFeedItem"}})
+              <!-- content $linkContent.contentId does not have the podcastItem mode -->
+            #end
+        #end
+      #end
+    #end
+  </channel>
+</rss>
+#else
+#set($feedLink = "#link({'contentId': $content.contentId, 'htmlEncodeLink': 'true', 'requestAttribs': {'localLinksEnabled': 'false'}, 'params': {'rss': 'true'}})")
+<link rel="alternate" type="application/rss+xml" title="$!content.name" href="$feedLink" />
 <div class="podcast element-teaser">
   #if($content.imageId)
     #set($m.stack.imageFormat = "3x2")
@@ -8,6 +101,14 @@
   #end
   <h2>$!content.name</h2>
   <p>$!content.text.value</p>
+
+  <p>&nbsp;</p>
+
+  <p class="text-right">
+    <a href="$feedLink" target="_blank">
+      Subscribe to the feed <i class="fa fa-rss" aria-hidden="true"></i>
+    </a>
+  </p>
 
   <p>&nbsp;</p>
 
@@ -26,3 +127,4 @@
   </p>
 
 </div>
+#end

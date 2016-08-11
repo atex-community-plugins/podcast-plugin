@@ -9,13 +9,9 @@ import java.util.logging.Logger;
 import com.polopoly.cm.ContentId;
 import com.polopoly.model.ModelPathUtil;
 import com.polopoly.render.CacheInfo;
-import com.polopoly.render.RenderException;
 import com.polopoly.render.RenderRequest;
-import com.polopoly.render.RenderResponse;
 import com.polopoly.siteengine.dispatcher.ControllerContext;
 import com.polopoly.siteengine.model.TopModel;
-import com.polopoly.siteengine.mvc.Renderer;
-import com.polopoly.util.StringUtil;
 
 /**
  * Podcast feed render controller, it will be called when rendering the rss feed and also for
@@ -57,34 +53,6 @@ public class PodcastFeedController extends BasePodcastController {
         if (imageId != null) {
             populateModelWithImage(imageId, m, context);
         }
-    }
-
-    @Override
-    public Renderer getRenderer(final RenderRequest request, final TopModel m, final Renderer defaultRenderer,
-                                final ControllerContext context) {
-
-        // set the content type only if we are dealing with an rss feed.
-
-        if (isRssFeed(request)) {
-            return new Renderer() {
-                @Override
-                public void render(final TopModel m, final RenderRequest req, final RenderResponse resp,
-                                   final CacheInfo cacheInfo, final ControllerContext context)
-                        throws RenderException {
-
-                    resp.setContentType("application/xml");
-                    defaultRenderer.render(m, req, resp, cacheInfo, context);
-
-                }
-
-            };
-        } else {
-            return defaultRenderer;
-        }
-    }
-
-    private boolean isRssFeed(final RenderRequest request) {
-        return StringUtil.equalsIgnoreCase(request.getParameter("rss"), "true");
     }
 
 }

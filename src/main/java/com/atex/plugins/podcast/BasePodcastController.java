@@ -21,10 +21,14 @@ import com.polopoly.cm.client.CMException;
 import com.polopoly.cm.client.CmClient;
 import com.polopoly.model.ModelPathUtil;
 import com.polopoly.render.CacheInfo;
+import com.polopoly.render.RenderException;
 import com.polopoly.render.RenderRequest;
+import com.polopoly.render.RenderResponse;
 import com.polopoly.siteengine.dispatcher.ControllerContext;
 import com.polopoly.siteengine.model.TopModel;
 import com.polopoly.siteengine.mvc.RenderControllerBase;
+import com.polopoly.siteengine.mvc.Renderer;
+import com.polopoly.util.StringUtil;
 
 /**
  * Base podcast controller
@@ -93,4 +97,31 @@ public abstract class BasePodcastController extends RenderControllerBase {
         }
     }
 
+    protected boolean isRssFeed(final RenderRequest request) {
+        return StringUtil.equalsIgnoreCase(request.getParameter("rss"), "true");
+    }
+
+    @Override
+    public Renderer getRenderer(final RenderRequest request, final TopModel m, final Renderer defaultRenderer,
+                                final ControllerContext context) {
+
+        // set the content type only if we are dealing with an rss feed.
+
+        if (isRssFeed(request)) {
+            return new Renderer() {
+                @Override
+                public void render(final TopModel m, final RenderRequest req, final RenderResponse resp,
+                                   final CacheInfo cacheInfo, final ControllerContext context)
+                        throws RenderException {
+
+                    resp.setContentType("text/xml");
+                    defaultRenderer.render(m, req, resp, cacheInfo, context);
+
+                }
+
+            };
+        } else {
+            return defaultRenderer;
+        }
+    }
 }
