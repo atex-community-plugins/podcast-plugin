@@ -72,7 +72,7 @@ public class PodcastFeedController extends BasePodcastController {
                                    final CacheInfo cacheInfo, final ControllerContext context)
                         throws RenderException {
 
-                    resp.setContentType("application/rss+xml");
+                    resp.setContentType("application/xml");
                     defaultRenderer.render(m, req, resp, cacheInfo, context);
 
                 }
