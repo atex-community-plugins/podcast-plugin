@@ -3,7 +3,7 @@
   <content>
     <metadata>
       <contentid>
-        <externalid>p.siteengine.FeedTemplateCategory</externalid>
+        <externalid>p.siteengine.ElementLayoutTemplates.d</externalid>
       </contentid>
     </metadata>
     <contentlist>
@@ -11,7 +11,7 @@
         <metadata>
           <referredContent>
             <contentid>
-              <externalid>com.atex.plugins.podcast.PodcastFeed</externalid>
+              <externalid>com.atex.plugins.podcast.Podcast</externalid>
             </contentid>
           </referredContent>
         </metadata>

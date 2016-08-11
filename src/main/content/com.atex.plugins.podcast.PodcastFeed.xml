@@ -1,35 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template-definition version="1.0" xmlns="http://www.polopoly.com/polopoly/cm/app/xml">
+  <input-template name="com.atex.plugins.podcast.PodcastFeed" label="com.atex.plugins.podcast.podcastfeed">
 
-  <input-template name="com.atex.plugins.podcast.Podcast.item">
-    <content-list name="feeds" input-template="com.atex.plugins.podcast.FeedContentListWrapper" />
-
-    <field name="feeds" input-template="p.ContentListEntryContainer" label="com.atex.plugins.podcast.feeds">
-      <param name="contentListName">feeds</param>
-      <param name="showActionButtonsInViewMode">false</param>
-      <param name="maxSize">1</param>
-    </field>
-    <field name="title" input-template="p.TextInput" label="com.atex.plugins.podcast.feeds.title" />
-    <field name="numberOfItems" input-template="p.TextInput" label="com.atex.plugins.podcast.numberOfItems" required="true">
-      <help>com.atex.plugins.podcast.numberOfItems.help</help>
-      <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
-      <param name="type">int</param>
-      <param name="size">5</param>
-      <param name="maxlength">5</param>
-      <param name="default">10</param>
-    </field>
-    <field name="startFrom" input-template="p.TextInput" label="com.atex.plugins.podcast.startFrom" required="true">
-      <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
-      <param name="type">int</param>
-      <param name="size">5</param>
-      <param name="maxlength">5</param>
-      <param name="default">1</param>
-    </field>
-  </input-template>
-
-  <input-template name="com.atex.plugins.podcast.Podcast" label="com.atex.plugins.podcast.podcast">
-
-    <policy>com.atex.plugins.podcast.PodcastPolicy</policy>
+    <policy>com.atex.plugins.podcast.PodcastFeedPolicy</policy>
 
     <editor>com.polopoly.cm.app.widget.OTopPolicyWidget</editor>
     <viewer>com.polopoly.cm.app.widget.OTopPolicyWidget</viewer>
@@ -53,10 +26,10 @@
 
     <param name="metadataPath">categorization</param>
 
-    <type>LayoutElement</type>
+    <type>Article</type>
 
     <content-list name="images" input-template="com.atex.plugins.podcast.ImageContentListWrapper" />
-    <content-list name="feeds" input-template="com.atex.plugins.podcast.FeedContentListWrapper" />
+    <content-list name="publishingQueue" input-template="com.atex.plugins.podcast.PublishingQueueContentListWrapper" />
 
     <layout name="pages" input-template="p.AjaxPageMenu">
       <layout name="content" input-template="p.Page" label="com.atex.plugins.podcast.Content">
@@ -89,39 +62,32 @@
               </field>
             </layout>
             <layout name="pq" input-template="p.Group">
-
-              <field name="feeds" input-template="p.Duplicator" label="com.atex.plugins.podcast.feeds">
-                <param name="startingCount">1</param>
-                <param name="hasAddButton">true</param>
-                <param name="hasMoveButtons">true</param>
-                <param name="hasSetCount">true</param>
-
-                <field name="feed" input-template="p.ContentSingleSelect" label="com.atex.plugins.podcast.feeds">
-                  <param name="showTreeSelect">false</param>
-                  <param name="allowDepartments">false</param>
-                  <param name="allowArticles">true</param>
-                  <idparam-list name="requiredInputTemplateIds">
-                    <contentid><externalid>com.atex.plugins.podcast.PodcastFeed</externalid></contentid>
-                  </idparam-list>
-                </field>
-                <field name="title" input-template="p.TextInput" label="com.atex.plugins.podcast.feeds.title" />
-                <field name="numberOfItems" input-template="p.TextInput" label="com.atex.plugins.podcast.numberOfItems" required="true">
-                  <help>com.atex.plugins.podcast.numberOfItems.help</help>
-                  <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
-                  <param name="type">int</param>
-                  <param name="size">5</param>
-                  <param name="maxlength">5</param>
-                  <param name="default">10</param>
-                </field>
-                <field name="startFrom" input-template="p.TextInput" label="com.atex.plugins.podcast.startFrom" required="true">
-                  <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
-                  <param name="type">int</param>
-                  <param name="size">5</param>
-                  <param name="maxlength">5</param>
-                  <param name="default">1</param>
-                </field>
+              <field name="numberOfItems" input-template="p.TextInput" label="com.atex.plugins.podcast.numberOfItems" required="true">
+                <help>com.atex.plugins.podcast.numberOfItems.help</help>
+                <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
+                <param name="type">int</param>
+                <param name="size">5</param>
+                <param name="maxlength">5</param>
+                <param name="default">10</param>
               </field>
-
+              <field name="publishingQueueCreator" input-template="p.ContentCreator" label="com.atex.plugins.podcast.newPublishingQueue">
+                <param name="createWithSecurityParent">true</param>
+                <param name="securityParentAlias">content</param>
+                <param name="insertTargetAlias">content</param>
+                <param name="askInsertTarget">false</param>
+                <param name="insertionContentListName">publishingQueue</param>
+                <param name="askInsertionContentListName">false</param>
+                <param name="showCategorySelectWithOneCategory">false</param>
+                <param name="askContentListPosition">false</param>
+                <param name="insertPosition">top</param>
+                <idparam name="templateRoot">
+                  <externalid>p.siteengine.SourcesRepositoryTemplates</externalid>
+                </idparam>
+              </field>
+              <field name="publishingQueue" input-template="p.ContentListEntryContainer" label="com.atex.plugins.podcast.publishingQueue">
+                <param name="contentListName">publishingQueue</param>
+                <param name="showActionButtonsInViewMode">false</param>
+              </field>
             </layout>
           </layout>
           <layout name="metadataColumn" input-template="p.Column">
@@ -190,7 +156,10 @@
     <field name="associatedUsers" input-template="p.AssociatedUsers" />
 
     <output-templates mode="www">
-      <id>com.atex.plugins.podcast.Podcast.ot</id>
+      <id>com.atex.plugins.podcast.PodcastFeed.ot</id>
+    </output-templates>
+    <output-templates mode="link">
+      <id>com.atex.plugins.podcast.PodcastFeed.Link.ot</id>
     </output-templates>
   </input-template>
 </template-definition>

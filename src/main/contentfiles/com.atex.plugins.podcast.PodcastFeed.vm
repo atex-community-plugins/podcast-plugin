@@ -1,0 +1,54 @@
+#if ($rssFeed)
+  #parse("com.atex.plugins.podcast.PodcastFeed.rss.vm")
+#else
+  #if (!$tag)
+    #set($tag = "div")
+  #end
+  #if (!$title)
+    #set($title=$content.name)
+  #end
+  #set($cssClass="media")
+  #if ($index)
+    #set($cssClass="$cssClass index${index}")
+  #end
+  <$tag class="$cssClass">
+    #if ($hasImage)
+    <div class="pull-left">
+      <a href="#">
+        <img class="media-object" src="${urlBuilder.width(32).buildUrl()}" alt="$!esc.html($title)">
+      </a>
+    </div>
+    #end
+    <div class="media-body">
+      <h4 class="media-heading">$!title</h4>
+
+      #if ($from)
+        ## $from is 1 based, make it 0 based.
+        #set($from = $math.sub($math.toInteger($from), 1))
+      #else
+        #set($from = 0)
+      #end
+
+      #set($origListSize = $content.defaultList.size())
+      #if ($max)
+        #set($numberOfItems = $math.min($math.toInteger($max), $origListSize))
+      #else
+        #set($numberOfItems = $content.numberOfItems)
+      #end
+
+      #if ($from > 0)
+        ## make sure $numberOfItems still fall in the current list size
+        #set($numberOfItems = $math.min($math.add($numberOfItems, $from), $origListSize))
+      #end
+
+      #set($list = $content.defaultList.subList($from, $numberOfItems))
+      #if ($list.size() > 0)
+        #foreach($entry in $list)
+            #set($linkContent = $entry.content)
+            #render({"content": $linkContent.contentId, "params": {"mode": "podcastItem"}})
+        #end
+      #end
+
+    </div>
+  </$tag>
+#end

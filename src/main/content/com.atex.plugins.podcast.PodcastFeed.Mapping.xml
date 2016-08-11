@@ -4,7 +4,7 @@
     <metadata>
       <contentid>
         <major>AppConfig</major>
-        <externalid>p.IndexMapping.Internal.com.atex.plugins.podcast.Podcast</externalid>
+        <externalid>p.IndexMapping.Internal.com.atex.plugins.podcast.PodcastFeed</externalid>
       </contentid>
       <security-parent>
         <externalid>p.SolrIndexDefinitionHome</externalid>
@@ -13,7 +13,7 @@
         <externalid>p.IndexMapping</externalid>
       </input-template>
     </metadata>
-    <component group="polopoly.Content" name="name">Internal index mappings for podcast</component>
+    <component group="polopoly.Content" name="name">Internal index mappings for podcast feed</component>
     <component group="mapping" name="name">title</component>
     <component group="mapping" name="text.value">text</component>
     <component group="mapping" name="associatedUsers.associatedUsers">modifiedBy</component>
@@ -26,9 +26,9 @@
         <externalid>p.InternalIndexDefinition</externalid>
       </contentid>
     </metadata>
-    <contentref group="mappers" name="com.atex.plugins.podcast.Podcast">
+    <contentref group="mappers" name="com.atex.plugins.podcast.PodcastFeed">
       <contentid>
-        <externalid>p.IndexMapping.Internal.com.atex.plugins.podcast.Podcast</externalid>
+        <externalid>p.IndexMapping.Internal.com.atex.plugins.podcast.PodcastFeed</externalid>
       </contentid>
     </contentref>
   </content>
@@ -37,7 +37,7 @@
     <metadata>
       <contentid>
         <major>AppConfig</major>
-        <externalid>p.IndexMapping.Public.com.atex.plugins.podcast.Podcast</externalid>
+        <externalid>p.IndexMapping.Public.com.atex.plugins.podcast.PodcastFeed</externalid>
       </contentid>
       <security-parent>
         <externalid>p.SolrIndexDefinitionHome</externalid>
@@ -46,7 +46,7 @@
         <externalid>p.IndexMapping</externalid>
       </input-template>
     </metadata>
-    <component group="polopoly.Content" name="name">Public index mappings for podcast</component>
+    <component group="polopoly.Content" name="name">Public index mappings for podcast feed</component>
     <component group="mapping" name="name">title</component>
     <component group="mapping" name="text.value">text</component>
   </content>
@@ -58,9 +58,9 @@
         <externalid>p.PublicIndexDefinition</externalid>
       </contentid>
     </metadata>
-    <contentref group="mappers" name="com.atex.plugins.podcast.Podcast">
+    <contentref group="mappers" name="com.atex.plugins.podcast.PodcastFeed">
       <contentid>
-        <externalid>p.IndexMapping.Public.com.atex.plugins.podcast.Podcast</externalid>
+        <externalid>p.IndexMapping.Public.com.atex.plugins.podcast.PodcastFeed</externalid>
       </contentid>
     </contentref>
   </content>

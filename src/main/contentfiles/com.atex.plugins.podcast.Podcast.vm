@@ -1,56 +1,34 @@
-#macro(drawDimension $dimensions $id $sep)
-  #set($result='')
-  #foreach($dimension in $dimensions)
-    #if ($dimension.id == $id)
-      #set($entitiesCount = $dimension.entities.size())
-      #if($entitiesCount > 0)
-        #foreach($entity in $dimension.entities)
-          #if ($foreach.count > 1)
-            #set($result="${result}${sep}")
-          #end
-          #set($result="${result}${entity.name}")
-        #end
+<div class="podcast element-teaser">
+  #if($content.imageId)
+    #set($m.stack.imageFormat = "3x2")
+    <div class="image">
+      #renderwithfallback({"content": $!content.imageId})
       #end
-      #break
-    #end
+    </div>
   #end
-  $result.trim()
-#end
-## Will need site alias set to get absolute URLs
-#set($feedLink="#link({'path': $content.parentIds, 'htmlEncodeLink': 'true', 'requestAttribs': {'localLinksEnabled': 'false'}})")
-<?xml version="1.0"?>
-    <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-        <channel>
-            <title>$esc.xml($content.name)</title>
-            <link>$!feedLink</link>
-            <description>$!esc.xml($content.text.value)</description>
-            <lastBuildDate>$!lastBuildDate</lastBuildDate>
-            ## Add channel image
-            #if($hasImage)
-                ## Will need an image service configuration for image service location to get absolute URL
-                #set($imageUrl = $esc.xml("${urlBuilder.width(200).buildUrl()}"))
-                <image>
-                    <title>$!title</title>
-                    <link>$!feedLink</link>
-                    <url>$!imageUrl</url>
-                </image>
-            #end
-            ##set($language = $content.language.value)
-            ##if("$!language" != "")
-            ##    <language>$!language</language>
-            ##end
-            #set($dimensions = $content.metadata.dimensions)
-            #set($category="#drawDimension($dimensions, 'dimension.IPTC', ',')")
-            #if ($category)
-              <category>$esc.xml($category.trim())</category>
-            #end
-            #set($numberOfItems = $content.numberOfItems)
-            #set($list = $content.defaultList.subList(0, $numberOfItems))
-            #foreach($entry in $list)
-                #set($linkContent = $entry.content)
-                #renderwithfallback({"content": $linkContent.contentId, "params": {"mode": "podcastItem"}})
-                  <!-- content $linkContent.contentId does not have the podcastItem mode -->
-                #end
-            #end
-        </channel>
-</rss>
+  <h2>
+    #if($link)
+      <a href="$link" title="$!content.name">$!content.name</a>
+    #else
+      $!content.name
+    #end
+  </h2>
+  <p>$!content.text.value</p>
+
+  <p>&nbsp;</p>
+
+  <p>
+    <ul class="media-list">
+    #foreach ($item in $content.feeds.elements)
+      #render({"content": $item.feed.contentId, "params": {
+        "title": $item.title.value,
+        "max": $item.numberOfItems.value,
+        "from": $item.startFrom.value,
+        "index": $foreach.count,
+        "tag": "li"
+      }})
+    #end
+    </ul>
+  </p>
+
+</div>
