@@ -28,7 +28,7 @@
             ## Add channel image
             #if($hasImage)
                 ## Will need an image service configuration for image service location to get absolute URL
-                #set($imageUrl = $esc.xml("${urlBuilder.width(200).buildUrl()}"))
+                #set($imageUrl = $esc.xml("$!domain${urlBuilder.width(200).buildUrl()}"))
                 <image>
                     <title>$!title</title>
                     <link>$!feedLink</link>
