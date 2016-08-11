@@ -104,16 +104,19 @@
                     <contentid><externalid>com.atex.plugins.podcast.PodcastFeed</externalid></contentid>
                   </idparam-list>
                 </field>
-                <field name="title" input-template="p.TextInput" label="com.atex.plugins.podcast.feeds.title" />
-                <field name="numberOfItems" input-template="p.TextInput" label="com.atex.plugins.podcast.numberOfItems" required="true">
-                  <help>com.atex.plugins.podcast.numberOfItems.help</help>
+                <field name="title" input-template="p.TextInput" label="com.atex.plugins.podcast.feeds.title">
+                  <help>com.atex.plugins.podcast.feeds.title.help</help>
+                </field>
+                <field name="numberOfItems" input-template="p.TextInput" label="com.atex.plugins.podcast.feeds.numberOfItems" required="true">
+                  <help>com.atex.plugins.podcast.feeds.numberOfItems.help</help>
                   <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
                   <param name="type">int</param>
                   <param name="size">5</param>
                   <param name="maxlength">5</param>
                   <param name="default">10</param>
                 </field>
-                <field name="startFrom" input-template="p.TextInput" label="com.atex.plugins.podcast.startFrom" required="true">
+                <field name="startFrom" input-template="p.TextInput" label="com.atex.plugins.podcast.feeds.startFrom" required="true">
+                  <help>com.atex.plugins.podcast.feeds.startFrom.help</help>
                   <policy>com.polopoly.cm.app.policy.NumberInputPolicy</policy>
                   <param name="type">int</param>
                   <param name="size">5</param>

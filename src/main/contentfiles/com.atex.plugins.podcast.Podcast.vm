@@ -6,13 +6,7 @@
       #end
     </div>
   #end
-  <h2>
-    #if($link)
-      <a href="$link" title="$!content.name">$!content.name</a>
-    #else
-      $!content.name
-    #end
-  </h2>
+  <h2>$!content.name</h2>
   <p>$!content.text.value</p>
 
   <p>&nbsp;</p>
