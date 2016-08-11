@@ -113,6 +113,13 @@
       <version>${baseline.version}</version>
       <classifier>contentdata</classifier>
     </dependency>
+    
+    <dependency>
+      <groupId>com.atex.plugins</groupId>
+      <artifactId>twitter-bootstrap</artifactId>
+      <version>3.2.0-1</version>
+      <classifier>contentdata</classifier>
+    </dependency>
 
     <!-- this is needed to prevent xss -->
     <dependency>
